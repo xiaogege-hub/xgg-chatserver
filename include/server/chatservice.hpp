@@ -9,6 +9,7 @@
 #include "groupmodel.hpp"
 #include "json.hpp"
 #include "offlinemessagemodel.hpp"
+#include "redis.hpp"
 #include "usermodel.hpp"
 
 using namespace muduo;
@@ -49,6 +50,9 @@ class ChatService {
   // 群组聊天业务
   void groupChat(const TcpConnectionPtr &conn, json &js, Timestamp time);
 
+  // 从redis消息队列中获取订阅的消息
+  void handleRedisSubscribeMessage(int userid, string msg);
+
  private:
   // 构造函数中注册消息以及对应的Handler回调操作
   ChatService();
@@ -68,6 +72,9 @@ class ChatService {
   OfflineMsgModel _offlineMsgModel;
   FriendModel _friendModel;
   GroupModel _groupModel;
+
+  // redis操作对象
+  Redis _redis;
 };
 
 #endif
